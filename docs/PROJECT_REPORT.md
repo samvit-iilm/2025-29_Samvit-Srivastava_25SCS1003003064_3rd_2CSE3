@@ -14,7 +14,7 @@
 **NCS ID:** E19E86-0116588288923
 **Reporting to:** Assigned Project Head(s)
 **Programme Manager:** Dr. Anurag Shrivastava
-**Repository:** https://github.com/samvit-iilm/python-Internship
+**Repository:** https://github.com/samvit-iilm/2025-29_Samvit-Srivastava_25SCS1003003064_3rd_2CSE3
 
 ---
 
@@ -408,5 +408,5 @@ of this internship that I will carry into every project after it.
 
 ---
 
-**Project repository:** https://github.com/samvit-iilm/python-Internship
+**Project repository:** https://github.com/samvit-iilm/2025-29_Samvit-Srivastava_25SCS1003003064_3rd_2CSE3
 **Submitted:** September 2026
