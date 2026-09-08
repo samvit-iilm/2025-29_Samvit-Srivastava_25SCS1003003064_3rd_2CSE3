@@ -1,0 +1,41 @@
+$ python -m expense_tracker --file sample_expenses.json list -m 2026-08
+
+ID   DATE         CATEGORY             AMOUNT  NOTE
+--------------------------------------------------------------
+15   2026-08-01   food              Rs.149.99  canteen lunch
+16   2026-08-02   stationery         Rs.40.14  notebooks
+17   2026-08-03   rent            Rs.6,000.00  monthly room rent
+18   2026-08-03   travel            Rs.476.21  metro card
+19   2026-08-04   movies            Rs.418.20  ott subscription
+20   2026-08-06   food              Rs.321.77  groceries
+21   2026-08-10   stationery        Rs.110.14  notebooks
+22   2026-08-14   recharge          Rs.424.28  wifi bill
+23   2026-08-14   travel            Rs.887.19  auto to college
+24   2026-08-14   stationery        Rs.139.78  pens and file
+25   2026-08-17   stationery        Rs.185.42  pens and file
+26   2026-08-25   food              Rs.374.45  tea and samosa
+27   2026-08-25   books             Rs.219.69  python notes print
+28   2026-08-28   books             Rs.702.47  DSA book
+--------------------------------------------------------------
+TOTAL                                 Rs.10,449.73
+
+$ python -m expense_tracker --file sample_expenses.json summary
+
+Total spent : Rs.22,621.83
+Entries     : 28
+Biggest     : Rs.6,000.00 on rent (2026-07-03)
+
+BY CATEGORY
+----------------------------------------------
+  rent           Rs.12,000.00   53.0%  ####################
+  recharge        Rs.2,707.00   12.0%  #####
+  food            Rs.2,470.28   10.9%  ####
+  books           Rs.1,771.87    7.8%  ###
+  movies          Rs.1,628.84    7.2%  ###
+  travel          Rs.1,363.40    6.0%  ##
+  stationery        Rs.680.44    3.0%  #
+
+BY MONTH
+----------------------------------------------
+  2026-07        Rs.12,172.10
+  2026-08        Rs.10,449.73
