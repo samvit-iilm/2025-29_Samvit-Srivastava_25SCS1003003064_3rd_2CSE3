@@ -1,124 +1,133 @@
-# weblens — Web Server Log Analyzer
+# Expense Tracker CLI
 
-A command-line tool that reads Apache/Nginx access logs, produces traffic
-statistics, and flags suspicious activity — written in **pure Python 3.10+
-with no third-party dependencies**.
+A simple command-line tool to record daily expenses, see where the money went,
+and export everything to CSV — written in **pure Python 3.10+ with no
+third-party libraries**.
 
-Built as the capstone project for a **Python Developer Internship at
-Codec Technologies India Pvt. Ltd.** (08/07/2026 – 08/08/2026).
+Built as the project for a **Python Developer Internship at Codec Technologies
+India Pvt. Ltd.** (08/07/2026 – 08/08/2026).
 Full write-up: [`docs/PROJECT_REPORT.md`](docs/PROJECT_REPORT.md).
 
 ---
 
-## What it does
+## Features
 
-| | |
-|---|---|
-| **Parses** | Common Log Format and Combined Log Format, plain or `.gz` |
-| **Aggregates** | requests, unique IPs, bandwidth, status codes, methods, top paths, hourly traffic |
-| **Detects** | error spikes, brute-force/broken clients, path scanning, sensitive-file probes, injection attempts, traffic spikes, bot dominance |
-| **Reports** | ASCII terminal report with bar charts, standalone HTML dashboard, JSON, per-path CSV |
-| **Handles** | malformed lines (counted, never crashes), files larger than RAM (streaming generators) |
+- **Add** an expense with amount, category, note and date
+- **List** everything, or filter by category and month
+- **Delete** an entry by its id
+- **Summary** — total spent, biggest expense, category-wise share with bar chart, month-wise totals
+- **Export** to CSV for Excel or Google Sheets
+- Data stored in a plain, human-readable **JSON** file
+- Friendly errors: negative amounts, empty categories, bad dates and unknown ids are all rejected with a clear message
 
 ---
 
-## Quick start
+## Getting started
 
 ```bash
 git clone https://github.com/samvit-iilm/python-Internship.git
 cd python-Internship
-
-# 1. terminal report on the bundled sample log
-python -m weblens sample_data/access.log
-
-# 2. HTML dashboard
-python -m weblens sample_data/access.log --format html -o report.html
-
-# 3. machine-readable output + CSV export
-python -m weblens sample_data/access.log --format json -o report.json
-python -m weblens sample_data/access.log --csv paths.csv -o report.txt
 ```
 
-No `pip install` needed — the standard library is the only requirement.
+Nothing to install — Python 3.10 or newer is all you need.
 
-## Command reference
+```bash
+# add a few expenses
+python -m expense_tracker add 120 food -n "canteen lunch"
+python -m expense_tracker add 6000 rent -n "monthly room rent" -d 2026-08-03
+python -m expense_tracker add 250 books -n "DSA book"
 
+# see them
+python -m expense_tracker list
+python -m expense_tracker list -m 2026-08 -c food
+
+# where did the money go?
+python -m expense_tracker summary
+
+# remove a wrong entry, export the rest
+python -m expense_tracker delete 2
+python -m expense_tracker export expenses.csv
 ```
-usage: weblens [-h] [-f {text,html,json}] [-o OUTPUT] [--csv CSV] [-t TOP]
-               [--no-anomalies] [--fail-on-anomaly] [-q] [--version]
-               logfile
 
-  logfile              path to an access log (.log or .gz)
-  -f, --format         output format: text (default), html, json
-  -o, --output         write the report to a file instead of stdout
-  --csv CSV            also write a per-path breakdown to this CSV file
-  -t, --top            rows per ranking table (default: 10)
-  --no-anomalies       skip anomaly detection
-  --fail-on-anomaly    exit with status 2 if anomalies were found (for CI)
-  -q, --quiet          suppress progress messages
+Try it on the bundled sample data without touching your own file:
+
+```bash
+python -m expense_tracker --file sample_expenses.json summary
 ```
 
-Exit codes: `0` clean, `1` error (missing/unreadable/empty file), `2` anomalies
-found with `--fail-on-anomaly` — so it can be dropped straight into a cron job
-or CI pipeline.
+## Commands
+
+| Command | What it does |
+|---|---|
+| `add AMOUNT CATEGORY [-n NOTE] [-d YYYY-MM-DD]` | Record a new expense (date defaults to today) |
+| `list [-c CATEGORY] [-m YYYY-MM]` | Show expenses as a table with a total |
+| `delete ID` | Remove one expense |
+| `summary [-m YYYY-MM]` | Totals, biggest expense, category and month breakdown |
+| `export FILE.csv` | Write all expenses to a CSV file |
+
+Global options: `--file PATH` to use a different data file (default
+`expenses.json`), `--version`, `-h/--help`.
 
 ## Sample output
 
 ```
- OVERVIEW
-------------------------------------------------------------------------------
-  Requests parsed        : 1,500
-  Unique client IPs      : 62
-  Data transferred       : 98.9 MB
-  Error rate (4xx/5xx)   : 12.60%
-  Busiest hour           : 2026-08-04 14:00 (136 requests)
-  Lines read / malformed : 1,502 / 2 (99.9% parsed)
+$ python -m expense_tracker summary
 
- ANOMALIES
-------------------------------------------------------------------------------
-  [HIGH]   site-wide - 35 sensitive path(s) probed (94 requests)
-            evidence: /wp-admin/setup-config.php x12; /wp-login.php x10; ...
-  [MEDIUM] 185.220.101.44 - requested 36 distinct paths - looks like enumeration
-  [MEDIUM] 2026-08-04 14:00 - 136 requests vs 94 hourly average (z=3.8)
+Total spent : Rs.22,621.83
+Entries     : 28
+Biggest     : Rs.6,000.00 on rent (2026-07-03)
+
+BY CATEGORY
+----------------------------------------------
+  rent           Rs.12,000.00   53.0%  ####################
+  recharge        Rs.2,707.00   12.0%  #####
+  food            Rs.2,470.28   10.9%  ####
+  books           Rs.1,771.87    7.8%  ###
+  movies          Rs.1,628.84    7.2%  ###
+  travel          Rs.1,363.40    6.0%  ##
+  stationery        Rs.680.44    3.0%  #
+
+BY MONTH
+----------------------------------------------
+  2026-07        Rs.12,172.10
+  2026-08        Rs.10,449.73
 ```
 
-Full examples: [`docs/sample_report.txt`](docs/sample_report.txt) and
-[`docs/sample_report.html`](docs/sample_report.html).
+More in [`docs/sample_output.txt`](docs/sample_output.txt).
 
-## Project layout
+## Project structure
 
 ```
-weblens/
-├── __init__.py      package metadata
-├── __main__.py      enables `python -m weblens`
-├── models.py        LogEntry, ParseStats, Anomaly dataclasses
-├── parser.py        regex + streaming line parser
-├── analyzer.py      single-pass aggregation into TrafficStats
-├── anomalies.py     pluggable detection rules
-├── report.py        text / HTML / JSON / CSV renderers
-└── cli.py           argparse front-end
-tests/               40 unit + end-to-end tests
-scripts/             deterministic sample-log generator
-sample_data/         1,500-line sample access log
-docs/                project report and sample outputs
+expense_tracker/
+├── __init__.py     version
+├── __main__.py     enables `python -m expense_tracker`
+├── storage.py      load / save the JSON file, generate ids
+├── tracker.py      add, delete, filter, totals  (all the logic)
+└── cli.py          argparse commands and printing
+tests/              32 tests
+docs/               project report and sample output
+sample_expenses.json
 ```
 
-The pipeline is a straight line — **parse → analyze → detect → render** — and
-each stage only knows about the one before it, so a new output format or a new
-detection rule can be added without touching anything else.
+The logic in `tracker.py` never touches files and never prints — it only takes
+lists and returns values. That is what makes it easy to test, and it keeps
+`cli.py` free to deal with printing only.
 
-## Design notes
+## Data format
 
-- **Streaming, not slurping.** `parse_file()` is a generator, so a 5 GB log
-  uses the same memory as a 5 KB one.
-- **Bad data never crashes it.** Unparseable lines are counted and sampled,
-  and the parse success rate appears in every report.
-- **Rules are plain functions.** `anomalies.DEFAULT_RULES` is a tuple of
-  `TrafficStats -> list[Anomaly]` functions; adding a rule is one function plus
-  one tuple entry.
-- **Spikes use a z-score** over hourly buckets (flagged above 3σ) rather than a
-  fixed threshold, so it adapts to a quiet site and a busy one alike.
-- **Thresholds live in one place** at the top of `anomalies.py`.
+`expenses.json` is a plain list you can open and edit by hand:
+
+```json
+[
+  {
+    "id": 1,
+    "amount": 6000.0,
+    "category": "rent",
+    "note": "monthly room rent",
+    "date": "2026-07-03"
+  }
+]
+```
 
 ## Tests
 
@@ -126,19 +135,9 @@ detection rule can be added without touching anything else.
 python -m unittest discover -s tests -v
 ```
 
-40 tests cover timestamp/offset parsing, malformed input, aggregation maths,
-every detection rule (both firing and staying quiet), and all four output
-formats end to end.
-
-## Regenerating the sample log
-
-```bash
-python scripts/generate_sample_log.py sample_data/access.log 1500
-```
-
-The generator is seeded, so the output is identical every run — it deliberately
-plants a path scanner, a broken client, a download burst, and two malformed
-lines so every code path has something to find.
+32 tests covering the logic (adding, validation, id reuse, filtering, totals),
+the storage layer (round trip, missing file, corrupt JSON) and every CLI
+command end to end.
 
 ## Author
 

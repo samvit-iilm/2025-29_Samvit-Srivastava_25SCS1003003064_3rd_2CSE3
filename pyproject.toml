@@ -3,22 +3,17 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "weblens"
+name = "expense-tracker"
 version = "1.0.0"
-description = "Dependency-free web server access-log analyzer with anomaly detection"
+description = "A simple command-line expense tracker with JSON storage"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "Samvit Srivastava" }]
-keywords = ["logs", "access-log", "analytics", "anomaly-detection", "cli"]
-classifiers = [
-  "Programming Language :: Python :: 3",
-  "Environment :: Console",
-  "Topic :: System :: Logging",
-]
+keywords = ["expenses", "budget", "cli", "json"]
 dependencies = []
 
 [project.scripts]
-weblens = "weblens.cli:main"
+expense-tracker = "expense_tracker.cli:main"
 
 [tool.setuptools]
-packages = ["weblens"]
+packages = ["expense_tracker"]

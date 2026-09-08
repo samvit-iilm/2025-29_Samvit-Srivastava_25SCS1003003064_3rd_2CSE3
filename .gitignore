@@ -3,13 +3,9 @@ __pycache__/
 *.egg-info/
 .venv/
 venv/
-.pytest_cache/
-.coverage
-htmlcov/
-report.html
-report.json
-report.txt
-paths.csv
+expenses.json
+expenses.csv
+*.csv
 .DS_Store
 .idea/
 .vscode/

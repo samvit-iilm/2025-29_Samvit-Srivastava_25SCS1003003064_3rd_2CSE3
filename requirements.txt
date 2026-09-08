@@ -1,1 +1,1 @@
-# No third-party dependencies - weblens runs on the Python 3.10+ standard library.
+# No third-party dependencies - runs on the Python 3.10+ standard library.
