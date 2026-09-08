@@ -25,8 +25,8 @@ Full write-up: [`docs/PROJECT_REPORT.md`](docs/PROJECT_REPORT.md).
 ## Getting started
 
 ```bash
-git clone https://github.com/samvit-iilm/python-Internship.git
-cd python-Internship
+git clone https://github.com/samvit-iilm/2025-29_Samvit-Srivastava_25SCS1003003064_3rd_2CSE3.git
+cd 2025-29_Samvit-Srivastava_25SCS1003003064_3rd_2CSE3
 ```
 
 Nothing to install — Python 3.10 or newer is all you need.
